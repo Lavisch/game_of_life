@@ -39,18 +39,13 @@ public class GameOfLife : ProcessingLite.GP21
 				}
 			}
 		}
+		Debug.Log("cells size " + cells.GetLength(0) + " " + cells.GetLength(1));
 	}
 
 	void Update()
 	{
 		//Clear screen
 		Background(0);
-
-		//TODO: Calculate next generation
-		GameCell[,] cellsBuffer;
-
-
-		//TODO: update buffer
 
 		//Draw all cells.
 		for (int y = 0; y < numberOfRows; ++y)
@@ -59,6 +54,23 @@ public class GameOfLife : ProcessingLite.GP21
 			{
 				//Draw current cell
 				cells[x, y].Draw();
+			}
+		}
+
+        for (int y = 0; y < numberOfRows; y++)
+        {
+            for (int x = 0; x < numberOfColums; x++)
+            {
+				cells[x, y].IsAliveNext(cells, x, y);
+            }
+        }
+
+		for (int y = 0; y < numberOfRows; y++)
+		{
+			for (int x = 0; x < numberOfColums; x++)
+			{
+				GameCell cell = cells[x, y];
+				cell.alive = cell.aliveNext;
 			}
 		}
 	}
