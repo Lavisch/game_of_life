@@ -4,65 +4,52 @@ using UnityEngine;
 
 public class GameCell : ProcessingLite.GP21
 {
-	float x, y; //Keep track of our position
-	float size; //our size
+	float x, y;
+	float size;
 
-	//Keep track if we are alive
 	public bool alive = false;
 	public bool aliveNext = false;
 
-	//Constructor
 	public GameCell(float x, float y, float size)
 	{
-		//Our X is equal to incoming X, and so forth
-		//adjust our draw position so we are centered
 		this.x = x + size / 2;
 		this.y = y + size / 2;
 
-		//diameter/radius draw size fix
 		this.size = size / 2;
 	}
 
 	public void Draw()
 	{
-		//If we are alive, draw our dot.
 		if (alive)
 		{
-			NoStroke();
 			Fill(255);
 			Circle(x, y, size);
 		}
 	}
 
-	public void IsAliveNext(GameCell[,] cells, int x, int y)
+	public void UpdateAliveNext(GameCell[,] cells, int x, int y)
 	{
 		int neighborsAlive = NeighborsAlive(cells, x, y);
         if (alive)
         {
             if (neighborsAlive < 2)
-            {
 				aliveNext = false;
-            }
+
             else if (neighborsAlive < 4)
-            {
 				aliveNext = true;
-            }
+
             else
-            {
 				aliveNext = false;
-            }
         }
         else
         {
             if (neighborsAlive == 3)
-            {
 				aliveNext = true;
-            }
+
             else
-            {
 				aliveNext = false;
-            }
         }
+		Debug.Log(x + " " + y + ", alive = " + alive + ", neighborsAlive = " + neighborsAlive + ", aliveNext = " + aliveNext);
 	}
 
 	public int NeighborsAlive(GameCell[,] cells, int x, int y)
@@ -78,26 +65,23 @@ public class GameCell : ProcessingLite.GP21
 					int checkY = y + i;
 					int checkX = x + j;
 
-					Debug.Log("checkX = " + checkX + ", checkY = " + checkY);
-
-					if ((checkY < 0) || (y >= cells.GetLength(1)))
+					if ((checkY < 0) || (y >= cells.GetLength(1) - 1))
 					{
-						Debug.Log("bounds check failed checkY");
+						//Debug.Log("1st check: checkX = " + checkX + ", checkY = " + checkY);
 						continue;
 					}
 
-					if ((checkX < 0) || (x >= cells.GetLength(0)))
+					if ((checkX < 0) || (x >= cells.GetLength(0) - 1))
 					{
-						Debug.Log("bounds check failed checkX");
+						//Debug.Log("2nd check: checkX = " + checkX + ", checkY = " + checkY);
 						continue;
 					}
-
+					//Debug.Log("Pass checks, checkX = " + checkX + ", checkY = " + checkY);
 					if (cells[checkX, checkY].alive)
 						count++;	
 				}
 			}
         }
-
 		return count;
     }
 }
