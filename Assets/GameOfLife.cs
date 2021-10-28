@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class GameOfLife : ProcessingLite.GP21
 {
-	GameCell[,] cells;
-	float cellSize = 0.25f;
+	GameCell[] cells;
+	float cellSize = 0.8f;
 	int numberOfColums;
 	int numberOfRows;
 	int spawnChancePercentage = 15;
@@ -16,38 +16,33 @@ public class GameOfLife : ProcessingLite.GP21
 		numberOfColums = (int)Mathf.Floor(Width / cellSize);
 		numberOfRows = (int)Mathf.Floor(Height / cellSize);
 
-		cells = new GameCell[numberOfColums, numberOfRows];
+		cells = new GameCell[numberOfColums * numberOfRows];
 
-		for (int y = 0; y < numberOfRows; ++y)
-		{
-			for (int x = 0; x < numberOfColums; ++x)
-			{
-				cells[x, y] = new GameCell(x, y, cellSize);
+        for (int i = 0; i < cells.Length; i++)
+        {
+			int x = i % numberOfColums;
+			int y = i / numberOfColums;
+			cells[i] = new GameCell(x, y, cellSize);
+			if (Random.Range(0, 100) < spawnChancePercentage)
+				cells[i].alive = true;
 
-				if (Random.Range(0, 100) < spawnChancePercentage)
-					cells[x, y].alive = true;
-			}
 		}
+		Debug.Log(numberOfColums + " " + numberOfRows);
+		Debug.Log(cells.Length);
 	}
 
 	void Update()
 	{
-		Draw();
+		Background(0);
 		Control();
-
-        foreach (GameCell cell in cells)
-            UpdateAliveNext(cell);
+        for (int i = 0; i < cells.Length; i++)
+        {
+			cells[i].Draw();
+            UpdateAliveNext(i);
+        }
 
         foreach (GameCell cell in cells)
 			cell.alive = cell.aliveNext;
-	}
-
-    private void Draw()
-    {
-		Background(0);
-
-        foreach (GameCell cell in cells)
-			cell.Draw();
 	}
 
     private void Control()
@@ -59,42 +54,36 @@ public class GameOfLife : ProcessingLite.GP21
 			Application.targetFrameRate -= 1;
 	}
 
-	public void UpdateAliveNext(GameCell cell)
+	public void UpdateAliveNext(int currentIndex)
 	{
-		int neighborsAlive = NeighborsAlive(cell);
+		int neighborsAlive = NeighborsAlive(currentIndex);
 
-		cell.aliveNext = cell.alive;
+		cells[currentIndex].aliveNext = cells[currentIndex].alive;
 
 		if (neighborsAlive == 3)
-			cell.aliveNext = true;
+			cells[currentIndex].aliveNext = true;
 		
 		if (neighborsAlive < 2 || neighborsAlive > 3)
-			cell.aliveNext = false;
+			cells[currentIndex].aliveNext = false;
 	}
 
-	public int NeighborsAlive(GameCell cell)
+	public int NeighborsAlive(int currentIndex)
 	{
 		int count = 0;
-		int x = cell.x;
-		int y = cell.y;
 
 		for (int i = -1; i <= 1; i++)
 		{
 			for (int j = -1; j <= 1; j++)
 			{
-				int checkY = y + i;
-				int checkX = x + j;
+				int checkIndex = currentIndex + numberOfColums * i + j;
 
-                if ((checkX == x) && (checkY == y))
+                if (checkIndex == currentIndex)
 					continue;
 
-                if ((checkY < 0) || (y >= numberOfRows - 1))
+				if (checkIndex < 0 || checkIndex >= cells.Length)
 					continue;
 
-				if ((checkX < 0) || (x >= numberOfColums - 1))
-					continue;
-				
-				if (cells[checkX, checkY].alive)
+				if (cells[checkIndex].alive)
 					count++;
 			}
 		}
