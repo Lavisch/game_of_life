@@ -1,0 +1,36 @@
+cells[]
+
+numberOfColumns = 40
+numberOfRows = 10
+cellsGrid = 40 * 10
+
+//list size = 400
+//index range = 399
+
+pos 0, 0 = cells[0]
+pos 12, 0 = cells[12]
+pos 12, 1 = cells[52]
+pos 14, 7 = cells[294]
+
+pos 0, 0 = cells[
+pos 12, 1 = cells[12 % numberOfColumns + 1 % numberOfRows]
+
+pos x, y = cells[(numberOfColumns - 1) * y + x]
+pos 14, 3 = cells[(numberOfColumns - 1) * y + x - 1]
+pos 40, 10 = cells[400]
+
+pos 14, 7 = cells[399 
+
+
+checkNeighbors 14, 7 (294)
+13, 7 = 294 - (numberOfColumns - 1) - 1, (numberOfRows - 1) - 1 = 294 - 39 -
+
+-41, 	-40, 	-39
+-1, 	0, 	1
+39, 	40, 	41
+
+cell, index = cellIndex
+
+cell 294
+draw(numberOfColumns, numberOfRows)
+	circle (294 % numberOfColumns, 
