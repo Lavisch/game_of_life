@@ -3,7 +3,7 @@ using UnityEngine;
 public class GameOfLife : ProcessingLite.GP21
 {
 	GameCell[] cells;
-	float cellSize = 0.8f;
+	float cellSize = 0.1f;
 	int numberOfColums;
 	int numberOfRows;
 	int spawnChancePercentage = 15;
@@ -11,7 +11,7 @@ public class GameOfLife : ProcessingLite.GP21
 	void Start()
 	{
 		QualitySettings.vSyncCount = 0;
-		Application.targetFrameRate = 20;
+		Application.targetFrameRate = 20	;
 
 		numberOfColums = (int)Mathf.Floor(Width / cellSize);
 		numberOfRows = (int)Mathf.Floor(Height / cellSize);
@@ -27,8 +27,6 @@ public class GameOfLife : ProcessingLite.GP21
 				cells[i].alive = true;
 
 		}
-		Debug.Log(numberOfColums + " " + numberOfRows);
-		Debug.Log(cells.Length);
 	}
 
 	void Update()
@@ -81,6 +79,9 @@ public class GameOfLife : ProcessingLite.GP21
 					continue;
 
 				if (checkIndex < 0 || checkIndex >= cells.Length)
+					continue;
+
+				if (Mathf.Abs(cells[currentIndex].x - cells[checkIndex].x) > 1)
 					continue;
 
 				if (cells[checkIndex].alive)

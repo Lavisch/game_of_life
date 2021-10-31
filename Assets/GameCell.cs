@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameCell : ProcessingLite.GP21
 {
 	float size;
-	int x, y;
+	public int x, y;
 
 	public bool alive;
 	public bool aliveNext;
@@ -23,7 +23,7 @@ public class GameCell : ProcessingLite.GP21
 		{
 			NoStroke();
 			Fill(255);
-			Circle(x * size * 2 + size, y * size * 2 +  size, size);
+			Circle(x * size * 2 + size, y * size * 2 + size, size);
 		}
 	}
 }
