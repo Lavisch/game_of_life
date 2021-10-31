@@ -19,13 +19,12 @@ public class GameOfLife : ProcessingLite.GP21
 		cells = new GameCell[numberOfColums * numberOfRows];
 
         for (int i = 0; i < cells.Length; i++)
-        {
+		{
 			int x = i % numberOfColums;
 			int y = i / numberOfColums;
 			cells[i] = new GameCell(x, y, cellSize);
 			if (Random.Range(0, 100) < spawnChancePercentage)
 				cells[i].alive = true;
-
 		}
 	}
 
@@ -33,6 +32,7 @@ public class GameOfLife : ProcessingLite.GP21
 	{
 		Background(0);
 		Control();
+
         for (int i = 0; i < cells.Length; i++)
         {
 			cells[i].Draw();
